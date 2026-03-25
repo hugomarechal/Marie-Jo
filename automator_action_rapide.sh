@@ -23,7 +23,7 @@
     /usr/bin/python3 -m pip install pypdf reportlab --quiet
 
 # Script Python inline
-/usr/bin/python3 << 'PYEOF' "$@"
+/usr/bin/python3 - "$@" << 'PYEOF'
 import sys, io, os, math
 
 args = sys.argv[1:]
