@@ -2,6 +2,15 @@
 /usr/bin/python3 -c "import pypdf, reportlab" 2>/dev/null || \
 /usr/bin/python3 -m pip install pypdf reportlab --quiet
 
+GS_PATH=$(which gs)
+
+if [ -z "$GS_PATH" ]; then
+    echo "GhostScript n'est pas installé !"
+    exit 1
+fi
+
+echo "GhostScript trouvé à $GS_PATH"
+
 OUTPUT_DIR="./Documents tamponnés"
 mkdir -p "$OUTPUT_DIR"
 
@@ -10,7 +19,7 @@ for input in "$@"; do
     original_name="$(basename "$input" .pdf)"
     output_path="$OUTPUT_DIR/${original_name}_tamponné.pdf"
 
-/usr/bin/python3 - "$input" "$output_path" "$original_name" << 'PYEOF'
+/usr/bin/python3 - "$input" "$output_path" "$original_name" "$GS_PATH" << 'PYEOF'
 
 import sys, io, base64, subprocess
 from reportlab.lib.utils import ImageReader
@@ -20,6 +29,7 @@ from reportlab.pdfgen import canvas
 input_path = sys.argv[1]
 output_path = sys.argv[2]
 doc_name = sys.argv[3]
+gs_path = sys.argv[4]
 
 #traitement base64
 
@@ -31,7 +41,7 @@ stamp_image = ImageReader(io.BytesIO(base64.b64decode(b64)))
 #  Normalisation PDF via Ghostscript directement en mémoire
 
 gs_cmd = [
-    "gs", "-q", "-dNOPAUSE", "-dBATCH", "-sDEVICE=pdfwrite",
+    gs_path, "-q", "-dNOPAUSE", "-dBATCH", "-sDEVICE=pdfwrite",
     "-dAutoRotatePages=/None", "-sOutputFile=-", input_path
 ]
 gs_proc = subprocess.run(gs_cmd, stdout=subprocess.PIPE, check=True)
