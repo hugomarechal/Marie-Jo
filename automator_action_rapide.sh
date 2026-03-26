@@ -12,9 +12,12 @@ fi
 echo "GhostScript trouvé à $GS_PATH"
 
 OUTPUT_DIR="./Documents tamponnés"
+echo "Création du répertoire de destination..."
 mkdir -p "$OUTPUT_DIR"
 
 for input in "$@"; do
+
+    echo "🕙 Traitement de $input..."
 
     original_name="$(basename "$input" .pdf)"
     output_path="$OUTPUT_DIR/${original_name}_tamponné.pdf"
@@ -93,5 +96,11 @@ with open(output_path, "wb") as f:
 
 PYEOF
 
+    if [ $? -eq 0 ]; then
+        echo "✅ $original_name : opération réussie, fichier créé dans $output_path"
+    else
+        echo "❌ $original_name : erreur pendant le traitement !" >&2
+        continue
+    fi
 
 done
