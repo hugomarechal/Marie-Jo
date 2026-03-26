@@ -70,7 +70,9 @@ def stamp_pdf(input_path, output_path, doc_name):
     with open(output_path, "wb") as f:
         writer.write(f)
 
-output_path = os.path.splitext(input_path)[0] + "_tamponné.pdf"
+output_path = doc_name + "_tamponné.pdf"
+
+# appel de la fonction
 stamp_pdf(input_path, output_path, doc_name)
 
 PYEOF
