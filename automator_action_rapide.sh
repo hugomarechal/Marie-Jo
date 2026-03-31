@@ -5,6 +5,9 @@ exec >> "$LOGFILE" 2>&1
 echo "==== $(date) ===="
 set -x
 
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
+
 # Installer les dépendances si nécessaire
 /usr/bin/python3 -c "import pypdf, reportlab" 2>/dev/null || \
 /usr/bin/python3 -m pip install pypdf reportlab --quiet
