@@ -1,3 +1,10 @@
+#log
+LOGFILE="$HOME/automator.log"
+exec >> "$LOGFILE" 2>&1
+ 
+echo "==== $(date) ===="
+set -x
+
 # Installer les dépendances si nécessaire
 /usr/bin/python3 -c "import pypdf, reportlab" 2>/dev/null || \
 /usr/bin/python3 -m pip install pypdf reportlab --quiet
