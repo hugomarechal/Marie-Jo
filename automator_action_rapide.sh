@@ -104,6 +104,9 @@ overlay_packet.seek(0)
 first_page.merge_page(PdfReader(overlay_packet).pages[0])
 writer.add_page(first_page)
 
+for page_num in range(1, len(reader.pages)):
+    writer.add_page(reader.pages[page_num])
+
 with open(output_path, "wb") as f:
     writer.write(f)
 
